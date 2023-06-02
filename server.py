@@ -8,8 +8,9 @@ def hello_world(request):
     all_headers = {}
     for header, value in request.headers.items():
         all_headers[header]=value
-
-    return Response(str(all_headers))
+    if 'X-Forwarded-For' in all_headers:
+      return Response(str("<h2> Client IP: " + all_headers['X-Forwarded-For'] + "</h2>"))
+    return Response("<h2>Cannot read client address!!</h2>")
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT"))
